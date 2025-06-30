@@ -6,7 +6,7 @@ if [ ! -d "./build" ]; then
 fi
 if [ -d "./build" ]; then
 	echo "./build directory exists."
-	gcc -o build/app src/*.c -lSDL2
+	gcc -o build/app src/*.c -lSDL2 -lSDL2_image -lSDL2_ttf
 	echo "Build complete"
 fi
 if [[ "$1" == "run" ]]; then
