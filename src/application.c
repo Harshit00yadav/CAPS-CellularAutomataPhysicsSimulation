@@ -1,17 +1,9 @@
 #include "application.h"
+#include "base.h"
 
 bool sdl_init(App *app){
 	if (SDL_Init(SDL_INIT_EVERYTHING)){
 		fprintf(stderr, "Error Initializing SDL: %s\n", SDL_GetError());
-		return true;
-	}
-	int img_init = IMG_Init(IMAGE_FLAG);
-	if ((img_init & IMAGE_FLAG) != IMAGE_FLAG){
-		fprintf(stderr, "Error Initializing SDL_image: %s\n", IMG_GetError());
-		return true;
-	}
-	if (TTF_Init()){
-		fprintf(stderr, "Error Initializing SDL_ttf: %s\n", TTF_GetError());
 		return true;
 	}
 	app->window = SDL_CreateWindow(
@@ -31,27 +23,36 @@ bool sdl_init(App *app){
 		fprintf(stderr, "Error Creating Renderer: %s\n", SDL_GetError());
 		return true;
 	}
+	app->grid = grid_initialize(app->renderer, GRID_WIDTH, GRID_HIGHT, CELL_SIZE);
+	if (!app->grid){
+		return true;
+	}
+	app->mouse.buttondown = 0;
+	app->mouse.x = 0;
+	app->mouse.y = 0;
 	return false;
 }
 
 void app_cleanup(App *app, int exit_status){
-	TTF_CloseFont(app->text_font);
-	SDL_DestroyTexture(app->background);
+	grid_destroy(app->grid);
 	SDL_DestroyRenderer(app->renderer);
 	SDL_DestroyWindow(app->window);
-	TTF_Quit();
-	IMG_Quit();
 	SDL_Quit();
+	printf("--[ FINISHED ]--\n");
 	exit(exit_status);
 }
 
-void color_init(Colors *colors){
-	colors->fg_text.a = 255;
-	colors->fg_text.r = 255;
-	colors->fg_text.g = 255;
-	colors->fg_text.b = 155;
-	colors->err_text.a = 255;
-	colors->err_text.r = 255;
-	colors->err_text.g = 0;
-	colors->err_text.b = 0;
+void update(App *app){
+	int j = app->mouse.y / (CELL_SIZE + CELL_SEPRATION);
+	int i = app->mouse.x / (CELL_SIZE + CELL_SEPRATION);
+	if (app->mouse.buttondown && i < app->grid->width && j < app->grid->hight){
+		app->grid->cells[j][i].active = 1;
+	}
+}
+
+void render(App *app){
+	SDL_SetRenderDrawColor(app->renderer, 15, 15, 15, 255);
+	SDL_RenderClear(app->renderer);
+	grid_render(app->renderer, app->grid);
+	SDL_RenderPresent(app->renderer);
 }
