@@ -27,6 +27,7 @@ bool sdl_init(App *app){
 	if (!app->grid){
 		return true;
 	}
+	app->startautomata = 0;
 	app->mouse.buttondown = 0;
 	app->mouse.x = 0;
 	app->mouse.y = 0;
@@ -53,6 +54,6 @@ void update(App *app){
 void render(App *app){
 	SDL_SetRenderDrawColor(app->renderer, 15, 15, 15, 255);
 	SDL_RenderClear(app->renderer);
-	grid_render(app->renderer, app->grid);
+	grid_render(app->renderer, app->grid, app->startautomata);
 	SDL_RenderPresent(app->renderer);
 }

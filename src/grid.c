@@ -6,19 +6,31 @@ Grid *grid_initialize(SDL_Renderer *renderer, int width, int hight, int csize){
 	G->hight = hight;
 	G->cell_size = csize;
 	G->cells = (Cell **)malloc(hight*sizeof(Cell *));
+	G->buffer = (Cell **)malloc(hight*sizeof(Cell *));
 	if (G->cells == NULL){
+		fprintf(stderr, "Failed to allocate memory");
+		return NULL;
+	}
+	if (G->buffer == NULL){
 		fprintf(stderr, "Failed to allocate memory");
 		return NULL;
 	}
 	for (int i=0; i<hight; i++){
 		G->cells[i] = (Cell *)malloc(width*sizeof(Cell));
+		G->buffer[i] = (Cell *)malloc(width*sizeof(Cell));
 		if (G->cells[i] == NULL){
+			fprintf(stderr, "Failed to allocate memory");
+			return NULL;
+		}
+		if (G->buffer[i] == NULL){
 			fprintf(stderr, "Failed to allocate memory");
 			return NULL;
 		}
 		for (int j=0; j<G->width; j++){
 			G->cells[i][j].value = 0;
 			G->cells[i][j].active = 0;
+			G->buffer[i][j].value = 0;
+			G->buffer[i][j].active = 0;
 		}
 	}
 	G->surface = SDL_CreateRGBSurface(
@@ -40,8 +52,10 @@ void grid_destroy(Grid *G){
 	SDL_FreeSurface(G->surface);
 	for (int i=0; i<G->hight; i++){
 		free(G->cells[i]);
+		free(G->buffer[i]);
 	}
 	free(G->cells);
+	free(G->buffer);
 	free(G);
 }
 
@@ -54,7 +68,7 @@ void grid_print_stdout(Grid *G){
 	}
 }
 
-void grid_render(SDL_Renderer *renderer, Grid *G){
+void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 	SDL_FillRect(G->surface, NULL, SDL_MapRGB(G->surface->format, 0, 0, 0));
 	for (int i=0; i<G->hight; i++){
 		for (int j=0; j<G->width; j++){
@@ -63,6 +77,28 @@ void grid_render(SDL_Renderer *renderer, Grid *G){
 				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 255, 255, 255));
 			} else{
 				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 15, 15, 15));
+			}
+			// TODO: apply automata function
+			int neighbours[8];
+			neighbours[0] = (i-1>=0 && j-1>=0)?G->cells[i-1][j-1].active:0;
+			neighbours[1] = (i-1>=0)?G->cells[i-1][j].active:0;
+			neighbours[2] = (i-1>=0 && j+1<G->width)?G->cells[i-1][j+1].active:0;
+
+			neighbours[3] = (j-1>=0)?G->cells[i][j-1].active:0;
+			neighbours[4] = (j+1<G->width)?G->cells[i][j+1].active:0;
+
+			neighbours[5] = (i+1<G->hight && j-1>=0)?G->cells[i+1][j-1].active:0;
+			neighbours[6] = (i+1<G->hight)?G->cells[i+1][j].active:0;
+			neighbours[7] = (i+1<G->hight && j+1<G->width)?G->cells[i+1][j+1].active:0;
+
+			G->buffer[i][j].active = 0;
+			G->buffer[i][j].active = cellular_automata_1depth(neighbours, G->cells[i][j].active);
+		}
+	}
+	for (int i=0; i<G->hight; i++){
+		for (int j=0; j<G->width; j++){
+			if (startautomata){
+				G->cells[i][j].active = G->buffer[i][j].active;
 			}
 		}
 	}

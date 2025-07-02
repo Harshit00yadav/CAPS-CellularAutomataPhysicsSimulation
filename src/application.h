@@ -20,6 +20,7 @@ typedef struct APP {
 	SDL_Renderer *renderer;
 	Grid *grid;
 	Mouse mouse;
+	int startautomata;
 } App;
 
 #endif

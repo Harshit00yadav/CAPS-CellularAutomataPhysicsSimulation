@@ -12,6 +12,10 @@ void event_handler(App *app){
 					case SDL_SCANCODE_ESCAPE:
 						app_cleanup(app, EXIT_SUCCESS);
 						break;
+					case SDL_SCANCODE_RETURN:
+						app->startautomata = !app->startautomata;
+						printf("[ %s ] automata \n", (app->startautomata)?"ON":"OFF");
+						break;
 					default:
 						break;
 				}
