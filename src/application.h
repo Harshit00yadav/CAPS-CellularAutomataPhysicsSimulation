@@ -13,6 +13,7 @@ typedef struct MOUSE {
 	int x;
 	int y;
 	int buttondown;
+	char *tmplt;
 } Mouse;
 
 typedef struct APP {

@@ -1,4 +1,5 @@
 #include "application.h"
+#include "templates.h"
 #include "base.h"
 
 bool sdl_init(App *app){
@@ -31,10 +32,12 @@ bool sdl_init(App *app){
 	app->mouse.buttondown = 0;
 	app->mouse.x = 0;
 	app->mouse.y = 0;
+	app->mouse.tmplt = load_templates("./assets/templates/gosper_glider_gun.tmplt");
 	return false;
 }
 
 void app_cleanup(App *app, int exit_status){
+	free(app->mouse.tmplt);
 	grid_destroy(app->grid);
 	SDL_DestroyRenderer(app->renderer);
 	SDL_DestroyWindow(app->window);
@@ -47,7 +50,7 @@ void update(App *app){
 	int j = app->mouse.y / (CELL_SIZE + CELL_SEPRATION);
 	int i = app->mouse.x / (CELL_SIZE + CELL_SEPRATION);
 	if (app->mouse.buttondown && i < app->grid->width && j < app->grid->hight){
-		app->grid->cells[j][i].active = 1;
+		activate_template(app->grid, app->mouse.tmplt, i, j);
 	}
 }
 
@@ -56,4 +59,5 @@ void render(App *app){
 	SDL_RenderClear(app->renderer);
 	grid_render(app->renderer, app->grid, app->startautomata);
 	SDL_RenderPresent(app->renderer);
+	SDL_Delay(64);
 }

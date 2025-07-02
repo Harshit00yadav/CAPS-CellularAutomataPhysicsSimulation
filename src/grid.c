@@ -80,16 +80,14 @@ void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 			}
 			// TODO: apply automata function
 			int neighbours[8];
-			neighbours[0] = (i-1>=0 && j-1>=0)?G->cells[i-1][j-1].active:0;
-			neighbours[1] = (i-1>=0)?G->cells[i-1][j].active:0;
-			neighbours[2] = (i-1>=0 && j+1<G->width)?G->cells[i-1][j+1].active:0;
-
-			neighbours[3] = (j-1>=0)?G->cells[i][j-1].active:0;
-			neighbours[4] = (j+1<G->width)?G->cells[i][j+1].active:0;
-
-			neighbours[5] = (i+1<G->hight && j-1>=0)?G->cells[i+1][j-1].active:0;
-			neighbours[6] = (i+1<G->hight)?G->cells[i+1][j].active:0;
-			neighbours[7] = (i+1<G->hight && j+1<G->width)?G->cells[i+1][j+1].active:0;
+			neighbours[0] = ((i-1)>=0 && (j-1)>=0)?G->cells[(i-1)][(j-1)].active:0;
+			neighbours[1] = ((i-1)>=0)?G->cells[(i-1)][(j)].active:0;
+			neighbours[2] = ((i-1)>=0 && (j+1)<G->width)?G->cells[(i-1)][(j+1)].active:0;
+			neighbours[3] = ((j-1)>=0)?G->cells[(i)][(j-1)].active:0;
+			neighbours[4] = ((j+1)<G->width)?G->cells[(i)][(j+1)].active:0;
+			neighbours[5] = ((i+1)<G->hight && (j-1)>=0)?G->cells[(i+1)][(j-1)].active:0;
+			neighbours[6] = ((i+1)<G->hight)?G->cells[(i+1)][(j)].active:0;
+			neighbours[7] = ((i+1)<G->hight && (j+1)<G->width)?G->cells[(i+1)][(j+1)].active:0;
 
 			G->buffer[i][j].active = 0;
 			G->buffer[i][j].active = cellular_automata_1depth(neighbours, G->cells[i][j].active);
