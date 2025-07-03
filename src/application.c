@@ -1,6 +1,5 @@
 #include "application.h"
 #include "templates.h"
-#include "base.h"
 
 bool sdl_init(App *app){
 	if (SDL_Init(SDL_INIT_EVERYTHING)){
@@ -32,12 +31,18 @@ bool sdl_init(App *app){
 	app->mouse.buttondown = 0;
 	app->mouse.x = 0;
 	app->mouse.y = 0;
-	app->mouse.tmplt = load_templates("./assets/templates/gosper_glider_gun.tmplt");
+	app->mouse.tmplt_indx = 0;
+	app->mouse.tmplts[0] = load_templates("./assets/templates/glider.tmplt");
+	app->mouse.tmplts[1] = load_templates("./assets/templates/gosper_glider_gun.tmplt");
+	app->mouse.tmplts[2] = load_templates("./assets/templates/light_weight_spaceship.tmplt");
+	app->mouse.tmplts[3] = load_templates("./assets/templates/glider_stopper.tmplt");
 	return false;
 }
 
 void app_cleanup(App *app, int exit_status){
-	free(app->mouse.tmplt);
+	for (int i=0; i<MAX_TEMPLATES; i++){
+		free(app->mouse.tmplts[i]);
+	}
 	grid_destroy(app->grid);
 	SDL_DestroyRenderer(app->renderer);
 	SDL_DestroyWindow(app->window);
@@ -49,8 +54,9 @@ void app_cleanup(App *app, int exit_status){
 void update(App *app){
 	int j = app->mouse.y / (CELL_SIZE + CELL_SEPRATION);
 	int i = app->mouse.x / (CELL_SIZE + CELL_SEPRATION);
+	highlight_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j);
 	if (app->mouse.buttondown && i < app->grid->width && j < app->grid->hight){
-		activate_template(app->grid, app->mouse.tmplt, i, j);
+		activate_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j);
 	}
 }
 

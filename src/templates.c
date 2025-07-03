@@ -29,3 +29,21 @@ void activate_template(Grid *G, char *tmplt, int x, int y){
 		i++;
 	}
 }
+
+void highlight_template(Grid *G, char *tmplt, int x, int y){
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	while (tmplt[k] != '\0'){
+		if (tmplt[k] == '\n'){
+			i = -1;
+			j++;
+		} else if (tmplt[k] == 'o' && y+j < GRID_HIGHT && x+i < GRID_WIDTH){
+			if (G->cells[y+j][x+i].active != 1){
+				G->cells[y+j][x+i].active = -1;
+			}
+		}
+		k++;
+		i++;
+	}
+}

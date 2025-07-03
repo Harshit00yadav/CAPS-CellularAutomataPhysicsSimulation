@@ -16,6 +16,17 @@ void event_handler(App *app){
 						app->startautomata = !app->startautomata;
 						printf("[ %s ] automata \n", (app->startautomata)?"ON":"OFF");
 						break;
+					case SDL_SCANCODE_J:
+						app->mouse.tmplt_indx++;
+						app->mouse.tmplt_indx %= MAX_TEMPLATES;
+						break;
+					case SDL_SCANCODE_K:
+						app->mouse.tmplt_indx--;
+						if (app->mouse.tmplt_indx == -1){ 
+							app->mouse.tmplt_indx += MAX_TEMPLATES;
+						}
+						printf("%d\n", -1%MAX_TEMPLATES);
+						break;
 					default:
 						break;
 				}

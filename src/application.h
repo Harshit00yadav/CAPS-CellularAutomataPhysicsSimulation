@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include "grid.h"
+#include "base.h"
 
 #ifndef APPLICATION_H
 #define APPLICATION_H
@@ -13,7 +14,8 @@ typedef struct MOUSE {
 	int x;
 	int y;
 	int buttondown;
-	char *tmplt;
+	char *tmplts[MAX_TEMPLATES];
+	int tmplt_indx;
 } Mouse;
 
 typedef struct APP {

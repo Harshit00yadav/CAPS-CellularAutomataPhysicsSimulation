@@ -75,6 +75,9 @@ void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 			SDL_Rect r = {j*(G->cell_size+CELL_SEPRATION), i*(G->cell_size+CELL_SEPRATION), G->cell_size, G->cell_size};
 			if (G->cells[i][j].active == 1){
 				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 255, 255, 255));
+			} else if (G->cells[i][j].active == -1){
+				G->cells[i][j].active = 0;
+				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 115, 55, 15));
 			} else{
 				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 15, 15, 15));
 			}
