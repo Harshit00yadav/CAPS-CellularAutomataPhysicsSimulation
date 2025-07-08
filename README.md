@@ -23,7 +23,7 @@
 
 ## 📷 Screenshots
 
-![CAPS running a water simulation](assets/screenshots/screenshot01.png)
+![CAPS running a game of life simulation](assets/screenshots/screenshot01.png)
 
 ---
 
