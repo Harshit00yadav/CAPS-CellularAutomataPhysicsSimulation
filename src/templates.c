@@ -1,6 +1,6 @@
 #include "templates.h"
 
-char *load_templates(const char *path){
+char *load_templates(char *path){
 	FILE *tmplt_ptr;
 	char buffer[500];
 	char tmplt[500] = "";

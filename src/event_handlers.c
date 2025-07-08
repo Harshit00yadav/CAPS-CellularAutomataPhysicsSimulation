@@ -25,7 +25,6 @@ void event_handler(App *app){
 						if (app->mouse.tmplt_indx == -1){ 
 							app->mouse.tmplt_indx += MAX_TEMPLATES;
 						}
-						printf("%d\n", -1%MAX_TEMPLATES);
 						break;
 					default:
 						break;

@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <dirent.h>
 
 #define SCREEN_WIDTH 600
 #define SCREEN_HIGHT 400
-#define MAX_TEMPLATES 4
+#define MAX_TEMPLATES 8
 #define SCREEN_TITLE "Cellular Automata"
 #define CELL_SIZE 3
 #define CELL_SEPRATION 1

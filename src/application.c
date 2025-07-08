@@ -27,15 +27,34 @@ bool sdl_init(App *app){
 	if (!app->grid){
 		return true;
 	}
+
+	char *tmplt_path = "./assets/templates/";
+	DIR *d = opendir(tmplt_path);
+	if (!d) {
+		fprintf(stderr, "Unable to open ./assets/templates\n");
+		return true;
+	}
+	printf("Loading template files\n");
+	struct dirent *dir;
+	char path_tmplt[1024];
+	int indx = 0;
+	while ((dir = readdir(d)) != NULL){
+		memset(path_tmplt, '\0', sizeof(path_tmplt));
+		if (dir->d_type != DT_DIR){
+			strcat(path_tmplt, tmplt_path);
+			strcat(path_tmplt, dir->d_name);
+			printf("%s\n", path_tmplt);
+			app->mouse.tmplts[indx] = load_templates(path_tmplt);
+			indx++;
+		}
+	}
+	closedir(d);
+	printf("Loading completed\n");
 	app->startautomata = 0;
 	app->mouse.buttondown = 0;
 	app->mouse.x = 0;
 	app->mouse.y = 0;
 	app->mouse.tmplt_indx = 0;
-	app->mouse.tmplts[0] = load_templates("./assets/templates/glider.tmplt");
-	app->mouse.tmplts[1] = load_templates("./assets/templates/gosper_glider_gun.tmplt");
-	app->mouse.tmplts[2] = load_templates("./assets/templates/light_weight_spaceship.tmplt");
-	app->mouse.tmplts[3] = load_templates("./assets/templates/glider_stopper.tmplt");
 	return false;
 }
 
