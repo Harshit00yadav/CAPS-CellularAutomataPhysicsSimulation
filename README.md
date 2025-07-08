@@ -37,7 +37,7 @@
     ```bash
     sudo apt install libsdl2-dev
     ```
-- `make` (optional)
+- `make`
 
 ### ⚙️ Build
 
