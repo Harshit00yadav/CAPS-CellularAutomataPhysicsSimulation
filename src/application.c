@@ -51,6 +51,7 @@ bool sdl_init(App *app){
 	closedir(d);
 	printf("Loading completed\n");
 	app->startautomata = 0;
+	app->wallblock = 0;
 	app->mouse.buttondown = 0;
 	app->mouse.x = 0;
 	app->mouse.y = 0;
@@ -75,7 +76,11 @@ void update(App *app){
 	int i = app->mouse.x / (CELL_SIZE + CELL_SEPRATION);
 	highlight_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j);
 	if (app->mouse.buttondown && i < app->grid->width && j < app->grid->hight){
-		activate_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j);
+		if (app->wallblock){
+			activate_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j, -1, -9);
+		} else {
+			activate_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j, 0, 1);
+		}
 	}
 }
 

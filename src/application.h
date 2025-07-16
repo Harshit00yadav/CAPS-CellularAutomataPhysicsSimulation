@@ -24,6 +24,7 @@ typedef struct APP {
 	Grid *grid;
 	Mouse mouse;
 	int startautomata;
+	int wallblock;
 } App;
 
 #endif

@@ -78,6 +78,9 @@ void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 			} else if (G->cells[i][j].active == -1){
 				G->cells[i][j].active = 0;
 				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 115, 55, 15));
+			} else if (G->cells[i][j].active == -9){
+				G->cells[i][j].active = -9;
+				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 0, 0, 0));
 			} else{
 				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 15, 15, 15));
 			}
@@ -92,13 +95,19 @@ void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 			neighbours[6] = ((i+1)<G->hight)?G->cells[(i+1)][(j)].active:0;
 			neighbours[7] = ((i+1)<G->hight && (j+1)<G->width)?G->cells[(i+1)][(j+1)].active:0;
 
-			G->buffer[i][j].active = 0;
-			G->buffer[i][j].active = cellular_automata_1depth(neighbours, G->cells[i][j].active);
+			if (G->cells[i][j].value == -1){
+				G->buffer[i][j].active = -9;
+				continue;
+			} else {
+				G->buffer[i][j].active = 0;
+			}
+			// G->buffer[i][j].active = cellular_automata_1depth(neighbours, &G->cells[i][j].active);
+			G->buffer[i][j].active = sand_simulation(neighbours, &G->cells[i][j].active);
 		}
 	}
-	for (int i=0; i<G->hight; i++){
-		for (int j=0; j<G->width; j++){
-			if (startautomata){
+	if (startautomata){
+		for (int i=0; i<G->hight; i++){
+			for (int j=0; j<G->width; j++){
 				G->cells[i][j].active = G->buffer[i][j].active;
 			}
 		}

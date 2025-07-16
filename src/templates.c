@@ -14,7 +14,7 @@ char *load_templates(char *path){
 	return res;
 }
 
-void activate_template(Grid *G, char *tmplt, int x, int y){
+void activate_template(Grid *G, char *tmplt, int x, int y, int val, int activation){
 	int i = 0;
 	int j = 0;
 	int k = 0;
@@ -23,7 +23,8 @@ void activate_template(Grid *G, char *tmplt, int x, int y){
 			i = -1;
 			j++;
 		} else if (tmplt[k] == 'o'){
-			G->cells[y+j][x+i].active = 1;
+			G->cells[y+j][x+i].active = activation;
+			G->cells[y+j][x+i].value = val;
 		}
 		k++;
 		i++;
