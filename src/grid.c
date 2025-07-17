@@ -85,15 +85,15 @@ void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 15, 15, 15));
 			}
 			// TODO: apply automata function
-			int neighbours[8];
-			neighbours[0] = ((i-1)>=0 && (j-1)>=0)?G->cells[(i-1)][(j-1)].active:0;
-			neighbours[1] = ((i-1)>=0)?G->cells[(i-1)][(j)].active:0;
-			neighbours[2] = ((i-1)>=0 && (j+1)<G->width)?G->cells[(i-1)][(j+1)].active:0;
-			neighbours[3] = ((j-1)>=0)?G->cells[(i)][(j-1)].active:0;
-			neighbours[4] = ((j+1)<G->width)?G->cells[(i)][(j+1)].active:0;
-			neighbours[5] = ((i+1)<G->hight && (j-1)>=0)?G->cells[(i+1)][(j-1)].active:0;
-			neighbours[6] = ((i+1)<G->hight)?G->cells[(i+1)][(j)].active:0;
-			neighbours[7] = ((i+1)<G->hight && (j+1)<G->width)?G->cells[(i+1)][(j+1)].active:0;
+			int *neighbours[8];
+			neighbours[0] = ((i-1)>=0 && (j-1)>=0)?&G->cells[(i-1)][(j-1)].active:NULL;
+			neighbours[1] = ((i-1)>=0)?&G->cells[(i-1)][(j)].active:NULL;
+			neighbours[2] = ((i-1)>=0 && (j+1)<G->width)?&G->cells[(i-1)][(j+1)].active:NULL;
+			neighbours[3] = ((j-1)>=0)?&G->cells[(i)][(j-1)].active:NULL;
+			neighbours[4] = ((j+1)<G->width)?&G->cells[(i)][(j+1)].active:NULL;
+			neighbours[5] = ((i+1)<G->hight && (j-1)>=0)?&G->cells[(i+1)][(j-1)].active:NULL;
+			neighbours[6] = ((i+1)<G->hight)?&G->cells[(i+1)][(j)].active:NULL;
+			neighbours[7] = ((i+1)<G->hight && (j+1)<G->width)?&G->cells[(i+1)][(j+1)].active:NULL;
 
 			if (G->cells[i][j].value == -1){
 				G->buffer[i][j].active = -9;
