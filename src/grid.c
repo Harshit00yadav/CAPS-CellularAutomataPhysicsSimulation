@@ -101,8 +101,8 @@ void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 			} else {
 				G->buffer[i][j].active = 0;
 			}
-			// G->buffer[i][j].active = cellular_automata_1depth(neighbours, &G->cells[i][j].active);
-			G->buffer[i][j].active = sand_simulation(neighbours, &G->cells[i][j].active);
+			G->buffer[i][j].active = cellular_automata_1depth(neighbours, &G->cells[i][j].active);
+			// G->buffer[i][j].active = sand_simulation(neighbours, &G->cells[i][j].active);
 		}
 	}
 	if (startautomata){

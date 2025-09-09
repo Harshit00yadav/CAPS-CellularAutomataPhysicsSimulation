@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <SDL2/SDL.h>
 #include "base.h"
 #include "automata_functions.h"
 

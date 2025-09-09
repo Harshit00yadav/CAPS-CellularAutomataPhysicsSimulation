@@ -2,7 +2,7 @@ NAME=app
 BUILD_PATH=./build
 SRC_PATH=./src
 CC=gcc
-CFLAGS=-Wall -lSDL2
+CFLAGS=-Wall -lSDL2 -g
 
 all:
 	if [ ! -d "$(BUILD_PATH)" ]; then mkdir $(BUILD_PATH); fi
