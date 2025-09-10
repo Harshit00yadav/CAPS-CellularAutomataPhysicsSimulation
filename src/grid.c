@@ -72,7 +72,12 @@ void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 	SDL_FillRect(G->surface, NULL, SDL_MapRGB(G->surface->format, 0, 0, 0));
 	for (int i=0; i<G->hight; i++){
 		for (int j=0; j<G->width; j++){
-			SDL_Rect r = {j*(G->cell_size+CELL_SEPRATION), i*(G->cell_size+CELL_SEPRATION), G->cell_size, G->cell_size};
+			SDL_Rect r = {
+				CONTROLBOARD_WIDTH + j*(G->cell_size+CELL_SEPRATION), 
+				GRID_OFFSET + i*(G->cell_size+CELL_SEPRATION), 
+				G->cell_size, 
+				G->cell_size
+			};
 			if (G->cells[i][j].active == 1){
 				SDL_FillRect(G->surface, &r, SDL_MapRGB(G->surface->format, 255, 255, 255));
 			} else if (G->cells[i][j].active == -1){
@@ -86,14 +91,21 @@ void grid_render(SDL_Renderer *renderer, Grid *G, int startautomata){
 			}
 			// TODO: apply automata function
 			int *neighbours[8];
-			neighbours[0] = ((i-1)>=0 && (j-1)>=0)?&G->cells[(i-1)][(j-1)].active:NULL;
-			neighbours[1] = ((i-1)>=0)?&G->cells[(i-1)][(j)].active:NULL;
-			neighbours[2] = ((i-1)>=0 && (j+1)<G->width)?&G->cells[(i-1)][(j+1)].active:NULL;
-			neighbours[3] = ((j-1)>=0)?&G->cells[(i)][(j-1)].active:NULL;
-			neighbours[4] = ((j+1)<G->width)?&G->cells[(i)][(j+1)].active:NULL;
-			neighbours[5] = ((i+1)<G->hight && (j-1)>=0)?&G->cells[(i+1)][(j-1)].active:NULL;
-			neighbours[6] = ((i+1)<G->hight)?&G->cells[(i+1)][(j)].active:NULL;
-			neighbours[7] = ((i+1)<G->hight && (j+1)<G->width)?&G->cells[(i+1)][(j+1)].active:NULL;
+			neighbours[0] = &G->cells[(i-1+G->hight)%G->hight][(j-1+G->width)%(G->width)].active;
+			neighbours[1] = &G->cells[(i-1+G->hight)%(G->hight)][j].active;
+			neighbours[2] = &G->cells[(i-1+G->hight)%(G->hight)][(j+1)%(G->width)].active;
+			neighbours[3] = &G->cells[i][(j-1+G->width)%(G->width)].active;
+			neighbours[4] = &G->cells[i][(j+1)%(G->width)].active;
+			neighbours[5] = &G->cells[(i+1)%(G->hight)][(j-1+G->width)%(G->width)].active;
+			neighbours[6] = &G->cells[(i+1)%(G->hight)][j].active;
+			neighbours[7] = &G->cells[(i+1)%(G->hight)][(j+1)%(G->width)].active;
+			// neighbours[1] = ((i-1)>=0)?&G->cells[(i-1)][(j)].active:NULL;
+			// neighbours[2] = ((i-1)>=0 && (j+1)<G->width)?&G->cells[(i-1)][(j+1)].active:NULL;
+			// neighbours[3] = ((j-1)>=0)?&G->cells[(i)][(j-1)].active:NULL;
+			// neighbours[4] = ((j+1)<G->width)?&G->cells[(i)][(j+1)].active:NULL;
+			// neighbours[5] = ((i+1)<G->hight && (j-1)>=0)?&G->cells[(i+1)][(j-1)].active:NULL;
+			// neighbours[6] = ((i+1)<G->hight)?&G->cells[(i+1)][(j)].active:NULL;
+			// neighbours[7] = ((i+1)<G->hight && (j+1)<G->width)?&G->cells[(i+1)][(j+1)].active:NULL;
 
 			if (G->cells[i][j].value == -1){
 				G->buffer[i][j].active = -9;

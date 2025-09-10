@@ -4,6 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "grid.h"
 #include "base.h"
+#include "controlboard.h"
 
 #ifndef APPLICATION_H
 #define APPLICATION_H
@@ -25,6 +26,7 @@ typedef struct APP {
 	Mouse mouse;
 	int startautomata;
 	int wallblock;
+	CB_Vars *cbvars;
 } App;
 
 #endif

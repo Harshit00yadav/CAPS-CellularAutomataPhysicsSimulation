@@ -56,10 +56,13 @@ bool sdl_init(App *app){
 	app->mouse.x = 0;
 	app->mouse.y = 0;
 	app->mouse.tmplt_indx = 0;
+
+	app->cbvars = initialize_control_board(app->renderer);
 	return false;
 }
 
 void app_cleanup(App *app, int exit_status){
+	destroy_control_board(app->cbvars);
 	for (int i=0; i<MAX_TEMPLATES; i++){
 		free(app->mouse.tmplts[i]);
 	}
@@ -73,7 +76,8 @@ void app_cleanup(App *app, int exit_status){
 
 void update(App *app){
 	int j = app->mouse.y / (CELL_SIZE + CELL_SEPRATION);
-	int i = app->mouse.x / (CELL_SIZE + CELL_SEPRATION);
+	int i = (app->mouse.x - CONTROLBOARD_WIDTH) / (CELL_SIZE + CELL_SEPRATION);
+	i = (i>=0)?i:0;
 	highlight_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j);
 	if (app->mouse.buttondown && i < app->grid->width && j < app->grid->hight){
 		if (app->wallblock){
@@ -88,6 +92,7 @@ void render(App *app){
 	SDL_SetRenderDrawColor(app->renderer, 15, 15, 15, 255);
 	SDL_RenderClear(app->renderer);
 	grid_render(app->renderer, app->grid, app->startautomata);
+	cboard_render(app->renderer, app->cbvars);
 	SDL_RenderPresent(app->renderer);
-	SDL_Delay(64);
+	SDL_Delay(1000/FPS);
 }
