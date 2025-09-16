@@ -75,11 +75,35 @@ void app_cleanup(App *app, int exit_status){
 }
 
 void update(App *app){
-	int j = app->mouse.y / (CELL_SIZE + CELL_SEPRATION);
-	int i = (app->mouse.x - CONTROLBOARD_WIDTH) / (CELL_SIZE + CELL_SEPRATION);
+	if (app->startautomata){
+		app->cbvars->active = true;
+	} else {
+		app->cbvars->active = false;
+	}
+	cboard_update(app->cbvars, app->mouse);
+
+	// specical case virtual buttons
+	CB_Button *btn = &app->cbvars->buttons[0];
+	if (btn->clicked){
+		btn->clicked = false;
+		app->startautomata = !app->startautomata;
+		app->mouse.buttondown = false;
+		printf("[ %s ] automata \n", (app->startautomata)?"ON":"OFF");
+	}
+	btn = &app->cbvars->buttons[1];
+	if (btn->clicked){
+		btn->clicked = false;
+		app->wallblock = !app->wallblock;
+		app->mouse.buttondown = false;
+		printf("[ %s ] wallblock \n", (app->wallblock)?"ON":"OFF");
+	}
+
+	int j = app->mouse.y / (CELL_SIZE + CELL_SEPRATION) - 10;
+	int i = (app->mouse.x - CONTROLBOARD_WIDTH) / (CELL_SIZE + CELL_SEPRATION) - 10;
 	i = (i>=0)?i:0;
+	j = (j>=0)?j:0;
 	highlight_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j);
-	if (app->mouse.buttondown && i < app->grid->width && j < app->grid->hight){
+	if (app->mouse.x > CONTROLBOARD_WIDTH && app->mouse.buttondown){
 		if (app->wallblock){
 			activate_template(app->grid, app->mouse.tmplts[app->mouse.tmplt_indx], i, j, -1, -9);
 		} else {

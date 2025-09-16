@@ -8,16 +8,6 @@
 
 #ifndef APPLICATION_H
 #define APPLICATION_H
-typedef struct APP App;
-typedef struct MOUSE Mouse;
-
-typedef struct MOUSE {
-	int x;
-	int y;
-	int buttondown;
-	char *tmplts[MAX_TEMPLATES];
-	int tmplt_indx;
-} Mouse;
 
 typedef struct APP {
 	SDL_Window *window;
